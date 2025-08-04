@@ -1,33 +1,29 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/widgets.dart';
-
-class AppBlocObserver extends BlocObserver {
-  const AppBlocObserver();
-
-  @override
-  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
-    super.onChange(bloc, change);
-    log('onChange(${bloc.runtimeType}, $change)');
-  }
-
-  @override
-  void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
-    log('onError(${bloc.runtimeType}, $error, $stackTrace)');
-    super.onError(bloc, error, stackTrace);
-  }
-}
+import 'package:flappt/core/di/injection.dart';
+import 'package:flappt/core/theme/app_theme.dart';
+import 'package:flappt/core/utils/index.dart';
+import 'package:flutter/material.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
-  FlutterError.onError = (details) {
-    log(details.exceptionAsString(), stackTrace: details.stack);
+  WidgetsFlutterBinding.ensureInitialized();
+
+  FlutterError.onError = (err) {
+    AppLog.e(
+      err.exceptionAsString(),
+      error: err,
+      trace: err.stack,
+    );
   };
 
   Bloc.observer = const AppBlocObserver();
 
-  // Add cross-flavor configuration here
+  // Initialize theme
+  AppTheme.initialize();
+
+  // Setup dependencies
+  await setupDependencies();
 
   runApp(await builder());
 }
