@@ -10,6 +10,7 @@ export 'domain/repositories/auth_repository.dart';
 export 'domain/usecases/auth_login_usecase.dart';
 export 'domain/usecases/auth_logout_usecase.dart';
 export 'domain/usecases/auth_save_user_usecase.dart';
+export 'domain/usecases/params/login_params.dart';
 
 // Presentation
 export 'presentation/bloc/auth_bloc.dart';

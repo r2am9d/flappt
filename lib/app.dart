@@ -1,3 +1,4 @@
+import 'package:flappt/core/config/index.dart';
 import 'package:flappt/core/di/injection.dart';
 import 'package:flappt/core/l10n/l10n.dart';
 import 'package:flappt/core/router/app_router.dart';
@@ -14,21 +15,8 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => getIt<AuthBloc>()
-            ..add(
-              const AuthSaveUser(
-                user: User(
-                  id: 1,
-                  username: 'jdoe',
-                  password: 'admin12345',
-                  details: Details(
-                    firstname: 'John',
-                    lastname: 'Doe',
-                    balance: 1500,
-                  ),
-                ),
-              ),
-            ),
+          create: (context) =>
+              getIt<AuthBloc>()..add(const AuthSaveUser(user: defaultUser)),
         ),
       ],
       child: MaterialApp.router(

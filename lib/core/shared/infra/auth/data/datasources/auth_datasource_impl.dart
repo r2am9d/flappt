@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flappt/core/errors/index.dart';
 import 'package:flappt/core/shared/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,31 +11,21 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   final SharedPreferences prefs;
 
-  // Default user data for testing
-  // {
-  //   'id': 1,
-  //   'username': 'jdoe',
-  //   'password': 'jdoe123',
-  //   'details': {
-  //     'firstname': 'John',
-  //     'lastname': 'Doe',
-  //     'balance': 1500.00,
-  //   },
-  // }
-
   @override
   Future<UserModel> login(String username, String password) async {
     final userEntry = await getUser();
-    return (username == userEntry.username && password == userEntry.password)
-        ? userEntry
-        : throw Exception('Invalid credentials.');
+    if (username != userEntry.username || password != userEntry.password) {
+      throw PersistenceException.invalidCredentials();
+    }
+
+    return userEntry;
   }
 
   @override
   Future<UserModel> getUser() async {
     final userDataJson = prefs.getString('default_user');
     if (userDataJson == null) {
-      throw Exception('No user data found.');
+      throw PersistenceException.userNotFound();
     }
 
     final userData = jsonDecode(userDataJson) as Map<String, dynamic>;

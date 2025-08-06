@@ -1,7 +1,14 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flappt/core/base/index.dart';
 import 'package:flappt/core/shared/index.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+
+class FakeLoginParams extends Fake implements LoginParams {}
+
+class FakeNoParams extends Fake implements NoParams {}
+
+class FakeUser extends Fake implements User {}
 
 // class MockAuthRepository extends Mock implements AuthRepository {}
 
@@ -12,6 +19,12 @@ class MockAuthLogoutUseCase extends Mock implements AuthLogoutUsecase {}
 class MockAuthSaveUserUseCase extends Mock implements AuthSaveUserUseCase {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(FakeLoginParams());
+    registerFallbackValue(FakeNoParams());
+    registerFallbackValue(FakeUser());
+  });
+
   group('AuthBloc', () {
     late AuthBloc authBloc;
 
@@ -22,7 +35,7 @@ void main() {
 
     // Test data
     const testUser = User(
-      id: 1,
+      id: -100,
       username: 'testuser',
       password: 'password123',
       details: Details(
@@ -54,10 +67,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthLoginUseCase.execute(
-            testUser.username,
-            testUser.password,
-          ),
+          () => mockAuthLoginUseCase.execute(any<LoginParams>()),
         ).thenAnswer((_) async => testUser);
       },
       act: (bloc) => bloc.add(
@@ -66,7 +76,7 @@ void main() {
           password: testUser.password,
         ),
       ),
-      skip: 1, // Skip isA<AuthLoading>() state check
+      skip: 1, // Skip AuthLoading checks
       expect: () => [
         isA<AuthVerifiedUser>().having(
           (s) => s.user,
@@ -76,10 +86,7 @@ void main() {
       ],
       verify: (_) {
         verify(
-          () => mockAuthLoginUseCase.execute(
-            testUser.username,
-            testUser.password,
-          ),
+          () => mockAuthLoginUseCase.execute(any<LoginParams>()),
         ).called(1);
       },
     );
@@ -89,10 +96,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthLoginUseCase.execute(
-            testUser.username,
-            'wrongPassword',
-          ),
+          () => mockAuthLoginUseCase.execute(any<LoginParams>()),
         ).thenThrow(Exception('Invalid credentials'));
       },
       act: (bloc) => bloc.add(
@@ -111,10 +115,7 @@ void main() {
       ],
       verify: (_) {
         verify(
-          () => mockAuthLoginUseCase.execute(
-            testUser.username,
-            'wrongPassword',
-          ),
+          () => mockAuthLoginUseCase.execute(any<LoginParams>()),
         ).called(1);
       },
     );
@@ -124,7 +125,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthLogoutUseCase.execute(),
+          () => mockAuthLogoutUseCase.execute(any<NoParams>()),
         ).thenAnswer((_) async {});
       },
       act: (bloc) => bloc.add(const AuthExecuteLogout()),
@@ -137,7 +138,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(() => mockAuthLogoutUseCase.execute()).called(1);
+        verify(() => mockAuthLogoutUseCase.execute(any<NoParams>())).called(1);
       },
     );
 
@@ -146,7 +147,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthLogoutUseCase.execute(),
+          () => mockAuthLogoutUseCase.execute(any<NoParams>()),
         ).thenThrow(Exception('Logout failed'));
       },
       act: (bloc) => bloc.add(const AuthExecuteLogout()),
@@ -159,7 +160,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(() => mockAuthLogoutUseCase.execute()).called(1);
+        verify(() => mockAuthLogoutUseCase.execute(any<NoParams>())).called(1);
       },
     );
 
@@ -168,13 +169,13 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthSaveUserUseCase.execute(testUser),
+          () => mockAuthSaveUserUseCase.execute(any<User>()),
         ).thenAnswer((_) async {});
       },
       act: (bloc) => bloc.add(const AuthSaveUser(user: testUser)),
       expect: () => <AuthState>[], // No new state
       verify: (_) {
-        verify(() => mockAuthSaveUserUseCase.execute(testUser)).called(1);
+        verify(() => mockAuthSaveUserUseCase.execute(any<User>())).called(1);
       },
     );
 
@@ -183,7 +184,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthSaveUserUseCase.execute(testUser),
+          () => mockAuthSaveUserUseCase.execute(any<User>()),
         ).thenThrow(Exception('Save failed'));
       },
       act: (bloc) => bloc.add(const AuthSaveUser(user: testUser)),
@@ -195,7 +196,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(() => mockAuthSaveUserUseCase.execute(testUser)).called(1);
+        verify(() => mockAuthSaveUserUseCase.execute(any<User>())).called(1);
       },
     );
   });

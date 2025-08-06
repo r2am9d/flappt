@@ -8,8 +8,24 @@
 
 ## 🔐 Default Credentials
 
-- User: 
-- Password:
+- User: jdoe
+- Password: admin12345
+
+Or configure it manually via:
+
+```dart
+// lib/core/config/app/user.dart
+const defaultUser = User(
+  id: 1,
+  username: 'jdoe',
+  password: 'admin12345',
+  details: Details(
+    firstname: 'John',
+    lastname: 'Doe',
+    balance: 50000,
+  ),
+);
+```
 
 ## 🛠️ Dependencies/Tools
 

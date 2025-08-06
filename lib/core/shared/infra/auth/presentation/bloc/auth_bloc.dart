@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flappt/core/base/index.dart';
 import 'package:flappt/core/mixins/index.dart';
 import 'package:flappt/core/shared/index.dart';
 import 'package:flappt/core/utils/index.dart';
@@ -45,14 +46,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
       await Future<void>.delayed(const Duration(seconds: 2));
 
       final user = await loginUseCase.execute(
-        event.username,
-        event.password,
+        LoginParams(
+          username: event.username,
+          password: event.password,
+        ),
       );
 
       emit(AuthVerifiedUser(user: user));
     } on Exception catch (e, stackTrace) {
       AppLog.e(
-        'Error during executeLogin: $e',
+        'Error during _executeLogin: $e',
         error: e,
         trace: stackTrace,
       );
@@ -69,13 +72,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
       emit(const AuthLoading(loading: true));
       await Future<void>.delayed(const Duration(seconds: 2));
 
-      await logoutUseCase.execute();
+      await logoutUseCase.execute(const NoParams());
 
       // Set the user to null after logout
       emit(const AuthVerifiedUser());
     } on Exception catch (e, stackTrace) {
       AppLog.e(
-        'Error during executeLogout: $e',
+        'Error during _executeLogout: $e',
         error: e,
         trace: stackTrace,
       );
@@ -92,7 +95,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
       await saveUserUseCase.execute(user);
     } on Exception catch (e, stackTrace) {
       AppLog.e(
-        'Error during saveUser: $e',
+        'Error during _saveUser: $e',
         error: e,
         trace: stackTrace,
       );
