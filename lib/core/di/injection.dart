@@ -7,9 +7,15 @@ final GetIt getIt = GetIt.instance;
 Future<void> setupDependencies() async {
   final prefs = await SharedPreferences.getInstance();
 
-  // Register dependencies
+  // Register external dependencies
+  getIt.registerSingleton<SharedPreferences>(prefs);
+
+  // Register application dependencies. Add below as needed.
+  _authDependencies(prefs);
+}
+
+void _authDependencies(SharedPreferences prefs) {
   getIt
-    ..registerSingleton<SharedPreferences>(prefs)
     ..registerLazySingleton<AuthDataSource>(
       () => AuthDataSourceImpl(prefs: prefs),
     )

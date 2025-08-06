@@ -6,7 +6,7 @@ class LoadingDialog {
   LoadingDialog._internal();
 
   static bool _isShown = false;
-  static late BuildContext _dialogContext;
+  static BuildContext? _dialogContext;
   static final LoadingDialog _instance = LoadingDialog._internal();
 
   static bool get isShown => _isShown;
@@ -20,19 +20,35 @@ class LoadingDialog {
       barrierColor: Colors.black.withValues(alpha: 0.5),
       builder: (dialogContext) {
         _dialogContext = dialogContext;
-        return const PopScope(
+        return PopScope(
           canPop: false,
-          child: Center(
-            child: CircularProgressIndicator(),
+          child: Material(
+            type: MaterialType.transparency,
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const CircularProgressIndicator(),
+              ),
+            ),
           ),
         );
       },
-    );
+    ).then((_) {
+      _isShown = false;
+      _dialogContext = null;
+    });
   }
 
   static void hide() {
     if (!_isShown) return;
-    _isShown = false;
-    Navigator.of(_dialogContext).pop();
+    if (_dialogContext != null) {
+      Navigator.of(_dialogContext!).pop();
+      _isShown = false;
+      _dialogContext = null;
+    }
   }
 }

@@ -13,20 +13,34 @@ class LoginPage extends StatelessWidget {
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (abContext, abState) {
-        final authLoading = authBloc.states<AuthLoading>()!;
-        final authError = authBloc.states<AuthError>()!;
+        final authLoading = authBloc.states<AuthLoading>();
+        final authError = authBloc.states<AuthError>();
 
-        if (abState is AuthLoading && authLoading.loading) {
-          LoadingDialog.show(context);
-        } else {
-          LoadingDialog.hide();
+        // Handle loading state
+        if (abState is AuthLoading && authLoading != null) {
+          authLoading.loading
+              ? LoadingDialog.show(context)
+              : LoadingDialog.hide();
         }
 
-        if (abState is AuthError && authError.message.isNotEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
+        // Handle error state
+        if (abState is AuthError &&
+            authError != null &&
+            authError.message.isNotEmpty) {
+          LoadingDialog.hide();
+          context.appScaffoldMsgr.hideCurrentSnackBar();
+
+          context.appScaffoldMsgr.showSnackBar(
             SnackBar(
               content: Text(authError.message),
               backgroundColor: context.appColors.error,
+              behavior: SnackBarBehavior.floating,
+              duration: const Duration(seconds: 3),
+              margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                left: 16,
+                right: 16,
+              ),
             ),
           );
         }

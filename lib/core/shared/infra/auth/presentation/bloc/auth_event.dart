@@ -16,9 +16,6 @@ final class AuthExecuteLogin extends AuthEvent {
 
   final String username;
   final String password;
-
-  @override
-  List<Object> get props => [username, password];
 }
 
 final class AuthExecuteLogout extends AuthEvent {
@@ -31,7 +28,4 @@ final class AuthSaveUser extends AuthEvent {
   });
 
   final User user;
-
-  @override
-  List<Object> get props => [user];
 }

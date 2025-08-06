@@ -1,4 +1,3 @@
-import 'package:flappt/core/extensions/focus_extension.dart';
 import 'package:flappt/core/extensions/index.dart';
 import 'package:flappt/core/keys/app_key.dart';
 import 'package:flappt/core/shared/index.dart';
@@ -107,7 +106,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     final formState = AppKey.loginFormKey.currentState;
 
     // Dismiss keyboard and remove focus from fields
-    context.focusScope.unfocus();
+    context.appFocusScope.unfocus();
 
     if (formState != null && formState.saveAndValidate()) {
       final formData = formState.value;

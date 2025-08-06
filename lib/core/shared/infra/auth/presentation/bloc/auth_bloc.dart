@@ -14,10 +14,10 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState>
     with MultiStateMixin<AuthEvent, AuthState> {
   AuthBloc({
+    // required this.authRepository,
     required this.loginUseCase,
     required this.logoutUseCase,
     required this.saveUserUseCase,
-    // required this.authRepository,
   }) : super(AuthInitial()) {
     // Event handlers
     on<AuthExecuteLogin>(_executeLogin, transformer: sequential());
@@ -30,27 +30,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
     holdState(() => const AuthError());
   }
 
+  // final AuthRepository authRepository;
   final AuthLoginUsecase loginUseCase;
   final AuthLogoutUsecase logoutUseCase;
   final AuthSaveUserUseCase saveUserUseCase;
-  // final AuthRepository authRepository;
 
   FutureOr<void> _executeLogin(
     AuthExecuteLogin event,
     Emitter<AuthState> emit,
   ) async {
     try {
-      // Simulate a login process
-      final username = event.username;
-      final password = event.password;
-
       // Simulate network delay
       emit(const AuthLoading(loading: true));
       await Future<void>.delayed(const Duration(seconds: 2));
 
-      final user = await loginUseCase.execute(username, password);
+      final user = await loginUseCase.execute(
+        event.username,
+        event.password,
+      );
 
-      emit(const AuthLoading());
       emit(AuthVerifiedUser(user: user));
     } on Exception catch (e, stackTrace) {
       AppLog.e(
@@ -58,7 +56,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
         error: e,
         trace: stackTrace,
       );
-      emit(const AuthLoading());
       emit(AuthError(message: e.toString()));
     }
   }
@@ -75,7 +72,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
       await logoutUseCase.execute();
 
       // Set the user to null after logout
-      emit(const AuthLoading());
       emit(const AuthVerifiedUser());
     } on Exception catch (e, stackTrace) {
       AppLog.e(
@@ -83,7 +79,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
         error: e,
         trace: stackTrace,
       );
-      emit(const AuthLoading());
       emit(AuthError(message: e.toString()));
     }
   }
@@ -101,7 +96,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
         error: e,
         trace: stackTrace,
       );
-      emit(const AuthLoading());
       emit(AuthError(message: e.toString()));
     }
   }
