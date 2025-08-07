@@ -22,4 +22,7 @@ class Details {
   final String firstname;
   final String lastname;
   final double balance;
+
+  // Computed properties
+  String get fullName => '$firstname $lastname'.trim();
 }

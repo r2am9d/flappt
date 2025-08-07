@@ -19,4 +19,18 @@ class PersistenceException extends AppException {
       code: 'PST_002',
     );
   }
+
+  factory PersistenceException.saveFailed() {
+    return const PersistenceException(
+      message: 'Failed to save user data.',
+      code: 'PST_003',
+    );
+  }
+
+  factory PersistenceException.logoutFailed() {
+    return const PersistenceException(
+      message: 'Failed to logout user.',
+      code: 'PST_004',
+    );
+  }
 }

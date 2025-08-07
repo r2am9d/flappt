@@ -22,7 +22,7 @@ class ValidationException extends AppException {
 
   factory ValidationException.greaterThanZero(String attribute) {
     return ValidationException(
-      message: '$attribute must be greater than 0.',
+      message: '$attribute must be greater than zero.',
       code: 'VAL_003',
     );
   }

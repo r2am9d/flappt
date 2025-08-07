@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flappt/core/base/index.dart';
+import 'package:flappt/core/errors/index.dart';
 import 'package:flappt/core/shared/index.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -35,13 +36,13 @@ void main() {
 
     // Test data
     const testUser = User(
-      id: -100,
+      id: 0,
       username: 'testuser',
-      password: 'password123',
+      password: '',
       details: Details(
         firstname: 'Test',
-        lastname: 'User',
-        balance: 1000,
+        lastname: '',
+        balance: -1000,
       ),
     );
 
@@ -197,6 +198,69 @@ void main() {
       ],
       verify: (_) {
         verify(() => mockAuthSaveUserUseCase.execute(any<User>())).called(1);
+      },
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      "emits [AuthError] when saveUser params user.id isn't greater than zero.",
+      build: () => authBloc,
+      setUp: () {
+        when(
+          () => mockAuthSaveUserUseCase.execute(testUser),
+        ).thenThrow(ValidationException.greaterThanZero('id'));
+      },
+      act: (bloc) => bloc.add(const AuthSaveUser(user: testUser)),
+      expect: () => [
+        isA<AuthError>().having(
+          (s) => s.message,
+          'message',
+          contains('id must be greater than zero.'),
+        ),
+      ],
+      verify: (_) {
+        verify(() => mockAuthSaveUserUseCase.execute(testUser)).called(1);
+      },
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'emits [AuthError] when saveUser params user.password is empty.',
+      build: () => authBloc,
+      setUp: () {
+        when(
+          () => mockAuthSaveUserUseCase.execute(testUser),
+        ).thenThrow(ValidationException.emptyField('password'));
+      },
+      act: (bloc) => bloc.add(const AuthSaveUser(user: testUser)),
+      expect: () => [
+        isA<AuthError>().having(
+          (s) => s.message,
+          'message',
+          contains('password cannot be empty.'),
+        ),
+      ],
+      verify: (_) {
+        verify(() => mockAuthSaveUserUseCase.execute(testUser)).called(1);
+      },
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'emits [AuthError] when saveUser params user.balance is negative.',
+      build: () => authBloc,
+      setUp: () {
+        when(
+          () => mockAuthSaveUserUseCase.execute(testUser),
+        ).thenThrow(ValidationException.nonNegative('balance'));
+      },
+      act: (bloc) => bloc.add(const AuthSaveUser(user: testUser)),
+      expect: () => [
+        isA<AuthError>().having(
+          (s) => s.message,
+          'message',
+          contains('balance must be non-negative.'),
+        ),
+      ],
+      verify: (_) {
+        verify(() => mockAuthSaveUserUseCase.execute(testUser)).called(1);
       },
     );
   });

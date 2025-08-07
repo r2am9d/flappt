@@ -90,9 +90,6 @@ class DetailsModel extends Details {
     );
   }
 
-  // Computed properties
-  String get fullName => '$firstname $lastname'.trim();
-
   // Converts DetailsModel to JSON
   Map<String, dynamic> toJson() {
     return {
