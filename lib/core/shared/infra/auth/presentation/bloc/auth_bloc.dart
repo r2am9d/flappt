@@ -16,10 +16,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
     with MultiStateMixin<AuthEvent, AuthState> {
   AuthBloc({
     // required this.authRepository,
-    required this.loginUseCase,
-    required this.logoutUseCase,
-    required this.saveUserUseCase,
-    required this.getUserUseCase,
+    required this.loginUsecase,
+    required this.logoutUsecase,
+    required this.saveUserUsecase,
+    required this.getUserUsecase,
   }) : super(AuthInitial()) {
     // Event handlers
     on<AuthExecuteLogin>(
@@ -49,10 +49,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
   }
 
   // final AuthRepository authRepository;
-  final AuthLoginUsecase loginUseCase;
-  final AuthLogoutUsecase logoutUseCase;
-  final AuthSaveUserUsecase saveUserUseCase;
-  final AuthGetUserUsecase getUserUseCase;
+  final AuthLoginUsecase loginUsecase;
+  final AuthLogoutUsecase logoutUsecase;
+  final AuthSaveUserUsecase saveUserUsecase;
+  final AuthGetUserUsecase getUserUsecase;
 
   FutureOr<void> _executeLogin(
     AuthExecuteLogin event,
@@ -63,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
       emit(const AuthLoading(loading: true));
       await Future<void>.delayed(const Duration(seconds: 2));
 
-      final user = await loginUseCase.execute(
+      final user = await loginUsecase.execute(
         LoginParams(
           username: event.username,
           password: event.password,
@@ -90,7 +90,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
       emit(const AuthLoading(loading: true));
       await Future<void>.delayed(const Duration(seconds: 2));
 
-      await logoutUseCase.execute(const NoParams());
+      await logoutUsecase.execute(const NoParams());
 
       // Set the user to null after logout
       emit(const AuthVerifiedUser());
@@ -110,7 +110,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
   ) async {
     try {
       final user = event.user;
-      await saveUserUseCase.execute(user);
+      await saveUserUsecase.execute(user);
     } on Exception catch (e, stackTrace) {
       AppLog.e(
         'Error during _saveUser: $e',
@@ -126,7 +126,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
     Emitter<AuthState> emit,
   ) async {
     try {
-      final user = await getUserUseCase.execute(const NoParams());
+      final user = await getUserUsecase.execute(const NoParams());
       emit(AuthVerifiedUser(user: user));
     } on Exception catch (e, stackTrace) {
       AppLog.d(

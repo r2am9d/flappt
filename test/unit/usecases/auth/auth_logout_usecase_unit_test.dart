@@ -15,7 +15,7 @@ void main() {
     usecase = AuthLogoutUsecase(authRepository: mockRepository);
   });
 
-  group('AuthLogoutUseCase', () {
+  group('AuthLogoutUsecase Unit Test', () {
     test('should complete successfully when logout succeeds', () async {
       // arrange
       when(

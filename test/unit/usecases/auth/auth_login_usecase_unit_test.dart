@@ -31,7 +31,7 @@ void main() {
     usecase = AuthLoginUsecase(authRepository: mockRepository);
   });
 
-  group('AuthLoginUseCase', () {
+  group('AuthLoginUsecase Unit Test', () {
     test('should return User when login is successful', () async {
       // arrange
       when(

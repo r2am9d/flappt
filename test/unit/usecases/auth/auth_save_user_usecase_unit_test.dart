@@ -76,7 +76,7 @@ void main() {
     usecase = AuthSaveUserUsecase(authRepository: mockRepository);
   });
 
-  group('AuthSaveUserUsecase', () {
+  group('AuthSaveUserUsecase Unit Test', () {
     test('should complete successfully when save succeeds', () async {
       // arrange
       when(

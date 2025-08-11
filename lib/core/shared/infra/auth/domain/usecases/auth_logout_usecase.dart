@@ -1,7 +1,7 @@
 import 'package:flappt/core/base/index.dart';
 import 'package:flappt/core/shared/infra/auth/index.dart';
 
-class AuthLogoutUsecase implements UseCase<void, NoParams> {
+class AuthLogoutUsecase implements Usecase<void, NoParams> {
   AuthLogoutUsecase({
     required this.authRepository,
   });

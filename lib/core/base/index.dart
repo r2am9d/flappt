@@ -1,2 +1,2 @@
 // Usecases
-export 'usecases/use_case.dart';
+export 'usecases/usecase.dart';

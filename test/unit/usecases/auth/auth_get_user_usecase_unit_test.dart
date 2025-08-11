@@ -29,7 +29,7 @@ void main() {
     usecase = AuthGetUserUsecase(authRepository: mockRepository);
   });
 
-  group('AuthGetUserUsecase', () {
+  group('AuthGetUserUsecase Unit Test', () {
     test('should return User when getUser is successful', () async {
       // arrange
       when(() => mockRepository.getUser()).thenAnswer((_) async => testUser);

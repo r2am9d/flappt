@@ -46,10 +46,10 @@ void _authDependencies(SharedPreferences prefs) {
     )
     ..registerLazySingleton<AuthBloc>(
       () => AuthBloc(
-        loginUseCase: getIt<AuthLoginUsecase>(),
-        logoutUseCase: getIt<AuthLogoutUsecase>(),
-        saveUserUseCase: getIt<AuthSaveUserUsecase>(),
-        getUserUseCase: getIt<AuthGetUserUsecase>(),
+        loginUsecase: getIt<AuthLoginUsecase>(),
+        logoutUsecase: getIt<AuthLogoutUsecase>(),
+        saveUserUsecase: getIt<AuthSaveUserUsecase>(),
+        getUserUsecase: getIt<AuthGetUserUsecase>(),
       ),
     );
 }
