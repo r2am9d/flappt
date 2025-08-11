@@ -19,22 +19,40 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
     required this.loginUseCase,
     required this.logoutUseCase,
     required this.saveUserUseCase,
+    required this.getUserUseCase,
   }) : super(AuthInitial()) {
     // Event handlers
-    on<AuthExecuteLogin>(_executeLogin, transformer: sequential());
-    on<AuthExecuteLogout>(_executeLogout, transformer: sequential());
-    on<AuthSaveUser>(_saveUser, transformer: sequential());
+    on<AuthExecuteLogin>(
+      _executeLogin,
+      transformer: sequential(),
+    );
+    on<AuthExecuteLogout>(
+      _executeLogout,
+      transformer: sequential(),
+    );
+    on<AuthSaveUser>(
+      _saveUser,
+      transformer: sequential(),
+    );
+    on<AuthCheckSession>(
+      _checkSession,
+      transformer: sequential(),
+    );
 
     // Hold State
     holdState(() => const AuthVerifiedUser());
     holdState(() => const AuthLoading());
     holdState(() => const AuthError());
+
+    // Check for existing session on startup
+    add(const AuthCheckSession());
   }
 
   // final AuthRepository authRepository;
   final AuthLoginUsecase loginUseCase;
   final AuthLogoutUsecase logoutUseCase;
-  final AuthSaveUserUseCase saveUserUseCase;
+  final AuthSaveUserUsecase saveUserUseCase;
+  final AuthGetUserUsecase getUserUseCase;
 
   FutureOr<void> _executeLogin(
     AuthExecuteLogin event,
@@ -100,6 +118,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
         trace: stackTrace,
       );
       emit(AuthError(message: e.toString()));
+    }
+  }
+
+  FutureOr<void> _checkSession(
+    AuthCheckSession event,
+    Emitter<AuthState> emit,
+  ) async {
+    try {
+      final user = await getUserUseCase.execute(const NoParams());
+      emit(AuthVerifiedUser(user: user));
+    } on Exception catch (e, stackTrace) {
+      AppLog.d(
+        '_checkSession: $e',
+        trace: stackTrace,
+      );
     }
   }
 }

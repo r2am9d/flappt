@@ -29,7 +29,6 @@ class LoginPage extends StatelessWidget {
             authError.message.isNotEmpty) {
           LoadingDialog.hide();
           context.appScaffoldMsgr.hideCurrentSnackBar();
-
           context.appScaffoldMsgr.showSnackBar(
             SnackBar(
               content: Text(authError.message),

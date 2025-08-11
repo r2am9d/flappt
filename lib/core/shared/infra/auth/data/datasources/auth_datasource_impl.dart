@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:flappt/core/config/index.dart';
 import 'package:flappt/core/errors/index.dart';
 import 'package:flappt/core/shared/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,12 +12,14 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   Future<UserModel> login(String username, String password) async {
-    final userEntry = await getUser();
-    if (username != userEntry.username || password != userEntry.password) {
+    if (username != defaultUser.username || password != defaultUser.password) {
       throw PersistenceException.invalidCredentials();
     }
 
-    return userEntry;
+    final userModel = UserModel.fromEntity(defaultUser);
+    await saveUser(userModel);
+
+    return userModel;
   }
 
   @override
@@ -28,17 +29,26 @@ class AuthDataSourceImpl implements AuthDataSource {
       throw PersistenceException.userNotFound();
     }
 
-    final userData = jsonDecode(userDataJson) as Map<String, dynamic>;
-    return UserModel.fromJson(userData);
+    return UserModelMapper.fromJson(userDataJson);
   }
 
   @override
   Future<void> logout() async {
-    await prefs.remove('default_user');
+    final success = await prefs.remove('default_user');
+    if (!success) {
+      throw PersistenceException.logoutFailed();
+    }
   }
 
   @override
   Future<void> saveUser(UserModel user) async {
-    await prefs.setString('default_user', jsonEncode(user.toJson()));
+    final success = await prefs.setString(
+      'default_user',
+      user.toJson(),
+    );
+
+    if (!success) {
+      throw PersistenceException.saveFailed();
+    }
   }
 }

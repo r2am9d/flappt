@@ -34,16 +34,22 @@ void _authDependencies(SharedPreferences prefs) {
         authRepository: getIt<AuthRepository>(),
       ),
     )
-    ..registerLazySingleton<AuthSaveUserUseCase>(
-      () => AuthSaveUserUseCase(
+    ..registerLazySingleton<AuthSaveUserUsecase>(
+      () => AuthSaveUserUsecase(
         authRepository: getIt<AuthRepository>(),
       ),
     )
-    ..registerFactory<AuthBloc>(
+    ..registerLazySingleton<AuthGetUserUsecase>(
+      () => AuthGetUserUsecase(
+        authRepository: getIt<AuthRepository>(),
+      ),
+    )
+    ..registerLazySingleton<AuthBloc>(
       () => AuthBloc(
         loginUseCase: getIt<AuthLoginUsecase>(),
         logoutUseCase: getIt<AuthLogoutUsecase>(),
-        saveUserUseCase: getIt<AuthSaveUserUseCase>(),
+        saveUserUseCase: getIt<AuthSaveUserUsecase>(),
+        getUserUseCase: getIt<AuthGetUserUsecase>(),
       ),
     );
 }

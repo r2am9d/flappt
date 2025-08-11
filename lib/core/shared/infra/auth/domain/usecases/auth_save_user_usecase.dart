@@ -2,8 +2,8 @@ import 'package:flappt/core/base/index.dart';
 import 'package:flappt/core/errors/index.dart';
 import 'package:flappt/core/shared/infra/auth/index.dart';
 
-class AuthSaveUserUseCase implements UseCase<void, User> {
-  AuthSaveUserUseCase({
+class AuthSaveUserUsecase implements UseCase<void, User> {
+  AuthSaveUserUsecase({
     required this.authRepository,
   });
 

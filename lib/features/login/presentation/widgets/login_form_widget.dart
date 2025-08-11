@@ -37,7 +37,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             textInputAction: TextInputAction.next,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: 'Username is required'),
+              FormBuilderValidators.required(
+                errorText: 'Username is required',
+              ),
             ]),
           ),
           const SizedBox(height: 16),
@@ -66,7 +68,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             textInputAction: TextInputAction.done,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: 'Password is required'),
+              FormBuilderValidators.required(
+                errorText: 'Password is required',
+              ),
             ]),
             onSubmitted: (_) => _handleLogin(context: context),
           ),
@@ -106,7 +110,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     final formState = AppKey.loginFormKey.currentState;
 
     // Dismiss keyboard and remove focus from fields
-    context.appFocusScope.unfocus();
+    context.appFocusManager.primaryFocus?.unfocus();
 
     if (formState != null && formState.saveAndValidate()) {
       final formData = formState.value;

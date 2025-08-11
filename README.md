@@ -187,6 +187,11 @@ To use the latest translations changes, you will need to generate them:
 flutter gen-l10n --arb-dir="lib/l10n/arb"
 ```
 
+2. Watch files during development:
+```sh
+dart run tool/watch_l10n.dart
+```
+
 Alternatively, run `flutter run` and code generation will take place automatically.
 
 [coverage_badge]: coverage_badge.svg

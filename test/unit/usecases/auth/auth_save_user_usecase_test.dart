@@ -12,7 +12,7 @@ void main() {
     registerFallbackValue(FakeUser());
   });
 
-  late AuthSaveUserUseCase usecase;
+  late AuthSaveUserUsecase usecase;
   late MockAuthRepository mockRepository;
 
   // Test data
@@ -73,10 +73,10 @@ void main() {
 
   setUp(() {
     mockRepository = MockAuthRepository();
-    usecase = AuthSaveUserUseCase(authRepository: mockRepository);
+    usecase = AuthSaveUserUsecase(authRepository: mockRepository);
   });
 
-  group('AuthSaveUserUseCase', () {
+  group('AuthSaveUserUsecase', () {
     test('should complete successfully when save succeeds', () async {
       // arrange
       when(
@@ -92,16 +92,17 @@ void main() {
     });
 
     test(
-        'should throw ValidationException when user id is not greater than zero',
-        () async {
-      // act & assert
-      expect(
-        () => usecase.execute(invalidIdUser),
-        throwsA(isA<ValidationException>()),
-      );
+      'should throw ValidationException when user id is not greater than zero',
+      () async {
+        // act & assert
+        expect(
+          () => usecase.execute(invalidIdUser),
+          throwsA(isA<ValidationException>()),
+        );
 
-      verifyNever(() => mockRepository.saveUser(any<User>()));
-    });
+        verifyNever(() => mockRepository.saveUser(any<User>()));
+      },
+    );
 
     test('should throw ValidationException when username is empty', () async {
       // act & assert

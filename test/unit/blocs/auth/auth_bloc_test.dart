@@ -17,7 +17,9 @@ class MockAuthLoginUseCase extends Mock implements AuthLoginUsecase {}
 
 class MockAuthLogoutUseCase extends Mock implements AuthLogoutUsecase {}
 
-class MockAuthSaveUserUseCase extends Mock implements AuthSaveUserUseCase {}
+class MockAuthSaveUserUseCase extends Mock implements AuthSaveUserUsecase {}
+
+class MockAuthGetUserUseCase extends Mock implements AuthGetUserUsecase {}
 
 void main() {
   setUpAll(() {
@@ -33,16 +35,17 @@ void main() {
     late MockAuthLoginUseCase mockAuthLoginUseCase;
     late MockAuthLogoutUseCase mockAuthLogoutUseCase;
     late MockAuthSaveUserUseCase mockAuthSaveUserUseCase;
+    late MockAuthGetUserUseCase mockAuthGetUserUseCase;
 
     // Test data
     const testUser = User(
-      id: 0,
-      username: 'testuser',
-      password: '',
+      id: 1,
+      username: 'jdoe',
+      password: 'admin12345',
       details: Details(
-        firstname: 'Test',
-        lastname: '',
-        balance: -1000,
+        firstname: 'John',
+        lastname: 'Doe',
+        balance: 50000,
       ),
     );
 
@@ -51,16 +54,27 @@ void main() {
       mockAuthLoginUseCase = MockAuthLoginUseCase();
       mockAuthLogoutUseCase = MockAuthLogoutUseCase();
       mockAuthSaveUserUseCase = MockAuthSaveUserUseCase();
+      mockAuthGetUserUseCase = MockAuthGetUserUseCase();
+
+      // Mock getUserUseCase for automatic AuthCheckSession call in constructor
+      when(
+        () => mockAuthGetUserUseCase.execute(any<NoParams>()),
+      ).thenThrow(PersistenceException.userNotFound());
 
       authBloc = AuthBloc(
         loginUseCase: mockAuthLoginUseCase,
         logoutUseCase: mockAuthLogoutUseCase,
         saveUserUseCase: mockAuthSaveUserUseCase,
+        getUserUseCase: mockAuthGetUserUseCase,
       );
     });
 
     test('initial AuthBloc state is [AuthInitial]', () {
       expect(authBloc.state, isA<AuthInitial>());
+    });
+
+    test('AuthCheckSession is called automatically on bloc creation', () {
+      verify(() => mockAuthGetUserUseCase.execute(any<NoParams>())).called(1);
     });
 
     blocTest<AuthBloc, AuthState>(
@@ -261,6 +275,44 @@ void main() {
       ],
       verify: (_) {
         verify(() => mockAuthSaveUserUseCase.execute(testUser)).called(1);
+      },
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'emits [AuthVerifiedUser] when checkSession finds existing user',
+      build: () => authBloc,
+      setUp: () {
+        when(
+          () => mockAuthGetUserUseCase.execute(any<NoParams>()),
+        ).thenAnswer((_) async => testUser);
+      },
+      act: (bloc) => bloc.add(const AuthCheckSession()),
+      expect: () => [
+        isA<AuthVerifiedUser>().having(
+          (s) => s.user,
+          'user',
+          equals(testUser),
+        ),
+      ],
+      verify: (_) {
+        // Called twice: once in constructor, once in test
+        verify(() => mockAuthGetUserUseCase.execute(any<NoParams>())).called(2);
+      },
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'does not emit when checkSession throws exception',
+      build: () => authBloc,
+      setUp: () {
+        when(
+          () => mockAuthGetUserUseCase.execute(any<NoParams>()),
+        ).thenThrow(PersistenceException.userNotFound());
+      },
+      act: (bloc) => bloc.add(const AuthCheckSession()),
+      expect: () => <AuthState>[],
+      verify: (_) {
+        // Called twice: once in constructor, once in test
+        verify(() => mockAuthGetUserUseCase.execute(any<NoParams>())).called(2);
       },
     );
   });

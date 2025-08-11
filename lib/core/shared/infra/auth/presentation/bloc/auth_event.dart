@@ -22,6 +22,10 @@ final class AuthExecuteLogout extends AuthEvent {
   const AuthExecuteLogout();
 }
 
+final class AuthCheckSession extends AuthEvent {
+  const AuthCheckSession();
+}
+
 final class AuthSaveUser extends AuthEvent {
   const AuthSaveUser({
     required this.user,

@@ -96,29 +96,31 @@ void main() {
       );
     });
 
-    test('should throw PersistenceException when credentials are invalid',
-        () async {
-      // arrange
-      when(
-        () => mockRepository.login(
-          testLoginParams.username,
-          testLoginParams.password,
-        ),
-      ).thenThrow(PersistenceException.invalidCredentials());
+    test(
+      'should throw PersistenceException when credentials are invalid',
+      () async {
+        // arrange
+        when(
+          () => mockRepository.login(
+            testLoginParams.username,
+            testLoginParams.password,
+          ),
+        ).thenThrow(PersistenceException.invalidCredentials());
 
-      // act & assert
-      expect(
-        () => usecase.execute(testLoginParams),
-        throwsA(isA<PersistenceException>()),
-      );
+        // act & assert
+        expect(
+          () => usecase.execute(testLoginParams),
+          throwsA(isA<PersistenceException>()),
+        );
 
-      verify(
-        () => mockRepository.login(
-          testLoginParams.username,
-          testLoginParams.password,
-        ),
-      ).called(1);
-    });
+        verify(
+          () => mockRepository.login(
+            testLoginParams.username,
+            testLoginParams.password,
+          ),
+        ).called(1);
+      },
+    );
 
     test('should throw NetworkException when network error occurs', () async {
       // arrange
