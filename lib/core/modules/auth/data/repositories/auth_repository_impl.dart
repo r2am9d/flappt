@@ -1,4 +1,4 @@
-import 'package:flappt/core/shared/infra/auth/index.dart';
+import 'package:flappt/core/modules/index.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl({
@@ -27,7 +27,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> saveUser(User user) async {
     await dataSource.saveUser(
-      UserModel.fromEntity(user),
+      UserEntityMapper.toModel(user),
     );
   }
 }

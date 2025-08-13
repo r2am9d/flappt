@@ -1,4 +1,4 @@
-import 'package:flappt/core/shared/infra/auth/index.dart';
+import 'package:flappt/core/modules/index.dart';
 
 abstract class AuthDataSource {
   Future<UserModel> login(String username, String password);

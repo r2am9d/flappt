@@ -1,13 +1,13 @@
 import 'package:flappt/core/base/index.dart';
 import 'package:flappt/core/errors/index.dart';
-import 'package:flappt/core/shared/index.dart';
+import 'package:flappt/core/modules/index.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 
 void main() {
-  late AuthGetUserUsecase usecase;
+  late AuthGetUserUseCase usecase;
   late MockAuthRepository mockRepository;
 
   // Test data
@@ -26,10 +26,10 @@ void main() {
 
   setUp(() {
     mockRepository = MockAuthRepository();
-    usecase = AuthGetUserUsecase(authRepository: mockRepository);
+    usecase = AuthGetUserUseCase(authRepository: mockRepository);
   });
 
-  group('AuthGetUserUsecase Unit Test', () {
+  group('AuthGetUserUseCase Unit Test', () {
     test('should return User when getUser is successful', () async {
       // arrange
       when(() => mockRepository.getUser()).thenAnswer((_) async => testUser);

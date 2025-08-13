@@ -1,5 +1,5 @@
-// Shared Infra
-export 'infra/auth/index.dart';
+// Shared Bloc
+export 'bloc/shell/shell_bloc.dart';
 
 // Shared Widgets
 export 'widgets/bottom_navbar/bottom_navbar_widget.dart';

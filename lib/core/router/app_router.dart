@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flappt/core/di/injection.dart';
 import 'package:flappt/core/keys/app_key.dart';
+import 'package:flappt/core/modules/index.dart';
 import 'package:flappt/core/shared/index.dart';
 import 'package:flappt/features/home/index.dart';
 import 'package:flappt/features/login/index.dart';
@@ -12,13 +13,13 @@ import 'package:go_router/go_router.dart';
 final routerNotifier = RouterNotifier(getIt<AuthBloc>());
 
 class RouterNotifier extends ChangeNotifier {
-  RouterNotifier(this._authBloc) {
-    _subscription = _authBloc.stream.listen((state) {
+  RouterNotifier(this._bloc) {
+    _subscription = _bloc.stream.listen((state) {
       notifyListeners();
     });
   }
 
-  final AuthBloc _authBloc;
+  final AuthBloc _bloc;
   late final StreamSubscription<AuthState> _subscription;
 
   @override
@@ -28,7 +29,7 @@ class RouterNotifier extends ChangeNotifier {
   }
 
   bool get isAuthenticated {
-    final verifiedUser = _authBloc.states<AuthVerifiedUser>();
+    final verifiedUser = _bloc.states<AuthVerifiedUser>();
     if (verifiedUser == null) return false;
     return verifiedUser.user != null;
   }
@@ -38,7 +39,7 @@ final appRouter = GoRouter(
   navigatorKey: AppKey.routerKey,
   initialLocation: '/login',
   refreshListenable: routerNotifier,
-  redirect: (routerContext, routerState) {
+  redirect: (routerCtx, routerState) {
     final isAuthenticated = routerNotifier.isAuthenticated;
     final isOnLoginPage = routerState.matchedLocation == '/login';
 

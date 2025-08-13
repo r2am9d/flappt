@@ -1,9 +1,9 @@
 import 'package:flappt/core/base/index.dart';
 import 'package:flappt/core/errors/index.dart';
-import 'package:flappt/core/shared/infra/auth/index.dart';
+import 'package:flappt/core/modules/index.dart';
 
-class AuthLoginUsecase implements Usecase<User, LoginParams> {
-  AuthLoginUsecase({
+class AuthLoginUseCase implements UseCase<User, LoginParams> {
+  AuthLoginUseCase({
     required this.authRepository,
   });
 

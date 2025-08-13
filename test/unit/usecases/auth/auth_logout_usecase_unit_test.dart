@@ -1,21 +1,21 @@
 import 'package:flappt/core/base/index.dart';
 import 'package:flappt/core/errors/index.dart';
-import 'package:flappt/core/shared/index.dart';
+import 'package:flappt/core/modules/index.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 
 void main() {
-  late AuthLogoutUsecase usecase;
+  late AuthLogoutUseCase usecase;
   late MockAuthRepository mockRepository;
 
   setUp(() {
     mockRepository = MockAuthRepository();
-    usecase = AuthLogoutUsecase(authRepository: mockRepository);
+    usecase = AuthLogoutUseCase(authRepository: mockRepository);
   });
 
-  group('AuthLogoutUsecase Unit Test', () {
+  group('AuthLogoutUseCase Unit Test', () {
     test('should complete successfully when logout succeeds', () async {
       // arrange
       when(

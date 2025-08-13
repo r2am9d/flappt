@@ -1,4 +1,4 @@
-import 'package:flappt/core/shared/index.dart';
+import 'package:flappt/core/modules/index.dart';
 
 abstract class AuthRepository {
   Future<User> login(String username, String password);

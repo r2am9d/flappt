@@ -1,5 +1,5 @@
 import 'package:flappt/core/l10n/l10n.dart';
-import 'package:flappt/core/shared/index.dart';
+import 'package:flappt/core/modules/index.dart';
 import 'package:flappt/features/login/presentation/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

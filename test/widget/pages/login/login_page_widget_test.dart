@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flappt/core/base/index.dart';
-import 'package:flappt/core/shared/index.dart';
+import 'package:flappt/core/modules/index.dart';
 import 'package:flappt/features/login/presentation/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,13 +11,13 @@ import '../../../helpers/helpers.dart';
 
 class MockAuthBloc extends MockBloc<AuthEvent, AuthState> implements AuthBloc {}
 
-class MockAuthLoginUsecase extends Mock implements AuthLoginUsecase {}
+class MockAuthLoginUseCase extends Mock implements AuthLoginUseCase {}
 
-class MockAuthLogoutUsecase extends Mock implements AuthLogoutUsecase {}
+class MockAuthLogoutUseCase extends Mock implements AuthLogoutUseCase {}
 
-class MockAuthSaveUserUsecase extends Mock implements AuthSaveUserUsecase {}
+class MockAuthSaveUserUseCase extends Mock implements AuthSaveUserUseCase {}
 
-class MockAuthGetUserUsecase extends Mock implements AuthGetUserUsecase {}
+class MockAuthGetUserUseCase extends Mock implements AuthGetUserUseCase {}
 
 class FakeLoginParams extends Fake implements LoginParams {}
 

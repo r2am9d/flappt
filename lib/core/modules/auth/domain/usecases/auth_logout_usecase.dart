@@ -1,8 +1,8 @@
 import 'package:flappt/core/base/index.dart';
-import 'package:flappt/core/shared/infra/auth/index.dart';
+import 'package:flappt/core/modules/index.dart';
 
-class AuthLogoutUsecase implements Usecase<void, NoParams> {
-  AuthLogoutUsecase({
+class AuthLogoutUseCase implements UseCase<void, NoParams> {
+  AuthLogoutUseCase({
     required this.authRepository,
   });
 

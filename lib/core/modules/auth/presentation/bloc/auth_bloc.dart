@@ -4,7 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flappt/core/base/index.dart';
+import 'package:flappt/core/di/injection.dart';
 import 'package:flappt/core/mixins/index.dart';
+import 'package:flappt/core/modules/index.dart';
 import 'package:flappt/core/shared/index.dart';
 import 'package:flappt/core/utils/index.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +18,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
     with MultiStateMixin<AuthEvent, AuthState> {
   AuthBloc({
     // required this.authRepository,
-    required this.loginUsecase,
-    required this.logoutUsecase,
-    required this.saveUserUsecase,
-    required this.getUserUsecase,
+    required this.loginUseCase,
+    required this.logoutUseCase,
+    required this.saveUserUseCase,
+    required this.getUserUseCase,
   }) : super(AuthInitial()) {
     // Event handlers
     on<AuthExecuteLogin>(
@@ -49,10 +51,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
   }
 
   // final AuthRepository authRepository;
-  final AuthLoginUsecase loginUsecase;
-  final AuthLogoutUsecase logoutUsecase;
-  final AuthSaveUserUsecase saveUserUsecase;
-  final AuthGetUserUsecase getUserUsecase;
+  final AuthLoginUseCase loginUseCase;
+  final AuthLogoutUseCase logoutUseCase;
+  final AuthSaveUserUseCase saveUserUseCase;
+  final AuthGetUserUseCase getUserUseCase;
 
   FutureOr<void> _executeLogin(
     AuthExecuteLogin event,
@@ -63,7 +65,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
       emit(const AuthLoading(loading: true));
       await Future<void>.delayed(const Duration(seconds: 2));
 
-      final user = await loginUsecase.execute(
+      final user = await loginUseCase.execute(
         LoginParams(
           username: event.username,
           password: event.password,
@@ -85,12 +87,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
     AuthExecuteLogout event,
     Emitter<AuthState> emit,
   ) async {
+    final shellBloc = getIt<ShellBloc>();
+
     try {
       // Simulate network delay
-      emit(const AuthLoading(loading: true));
+      shellBloc.add(const ShellSetLoading(loading: true));
       await Future<void>.delayed(const Duration(seconds: 2));
 
-      await logoutUsecase.execute(const NoParams());
+      await logoutUseCase.execute(const NoParams());
 
       // Set the user to null after logout
       emit(const AuthVerifiedUser());
@@ -100,7 +104,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
         error: e,
         trace: stackTrace,
       );
-      emit(AuthError(message: e.toString()));
+      shellBloc.add(ShellSetError(message: e.toString()));
+    } finally {
+      shellBloc.add(const ShellSetLoading(loading: false));
     }
   }
 
@@ -110,7 +116,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
   ) async {
     try {
       final user = event.user;
-      await saveUserUsecase.execute(user);
+      await saveUserUseCase.execute(user);
     } on Exception catch (e, stackTrace) {
       AppLog.e(
         'Error during _saveUser: $e',
@@ -126,7 +132,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
     Emitter<AuthState> emit,
   ) async {
     try {
-      final user = await getUserUsecase.execute(const NoParams());
+      final user = await getUserUseCase.execute(const NoParams());
       emit(AuthVerifiedUser(user: user));
     } on Exception catch (e, stackTrace) {
       AppLog.d(

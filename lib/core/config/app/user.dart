@@ -1,4 +1,4 @@
-import 'package:flappt/core/shared/infra/auth/index.dart';
+import 'package:flappt/core/modules/index.dart';
 
 const defaultUser = User(
   id: 1,

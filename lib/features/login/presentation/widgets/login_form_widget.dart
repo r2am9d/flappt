@@ -1,6 +1,6 @@
 import 'package:flappt/core/extensions/index.dart';
 import 'package:flappt/core/keys/app_key.dart';
-import 'package:flappt/core/shared/index.dart';
+import 'package:flappt/core/modules/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';

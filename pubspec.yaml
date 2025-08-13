@@ -11,8 +11,10 @@ dependencies:
   bloc_concurrency: ^0.3.0
   collection: ^1.19.1
   dart_mappable: ^4.6.0
-  dio: ^5.8.0+1
+  dio: ^5.9.0
+  entity_mapper: ^0.3.0
   equatable: ^2.0.7
+  fixnum: ^1.1.1
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
@@ -29,14 +31,17 @@ dependencies:
   meta: ^1.16.0
   salomon_bottom_bar: ^3.3.2
   shared_preferences: ^2.5.3
+  uuid: ^4.5.1
 
 dev_dependencies:
+  analyzer: ^7.7.1
   bloc_test: ^10.0.0
   build_runner: ^2.6.0
   dart_mappable_builder: ^4.6.0
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4
+  source_gen: ^3.1.0
   very_good_analysis: ^9.0.0
   watcher: ^1.1.2
 

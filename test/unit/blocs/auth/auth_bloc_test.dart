@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flappt/core/base/index.dart';
 import 'package:flappt/core/errors/index.dart';
-import 'package:flappt/core/shared/index.dart';
+import 'package:flappt/core/modules/index.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -13,13 +13,13 @@ class FakeUser extends Fake implements User {}
 
 // class MockAuthRepository extends Mock implements AuthRepository {}
 
-class MockAuthLoginUsecase extends Mock implements AuthLoginUsecase {}
+class MockAuthLoginUseCase extends Mock implements AuthLoginUseCase {}
 
-class MockAuthLogoutUsecase extends Mock implements AuthLogoutUsecase {}
+class MockAuthLogoutUseCase extends Mock implements AuthLogoutUseCase {}
 
-class MockAuthSaveUserUsecase extends Mock implements AuthSaveUserUsecase {}
+class MockAuthSaveUserUseCase extends Mock implements AuthSaveUserUseCase {}
 
-class MockAuthGetUserUsecase extends Mock implements AuthGetUserUsecase {}
+class MockAuthGetUserUseCase extends Mock implements AuthGetUserUseCase {}
 
 void main() {
   setUpAll(() {
@@ -32,10 +32,10 @@ void main() {
     late AuthBloc authBloc;
 
     // late MockAuthRepository mockAuthRepository;
-    late MockAuthLoginUsecase mockAuthLoginUsecase;
-    late MockAuthLogoutUsecase mockAuthLogoutUsecase;
-    late MockAuthSaveUserUsecase mockAuthSaveUserUsecase;
-    late MockAuthGetUserUsecase mockAuthGetUserUsecase;
+    late MockAuthLoginUseCase mockAuthLoginUseCase;
+    late MockAuthLogoutUseCase mockAuthLogoutUseCase;
+    late MockAuthSaveUserUseCase mockAuthSaveUserUseCase;
+    late MockAuthGetUserUseCase mockAuthGetUserUseCase;
 
     // Test data
     const testUser = User(
@@ -51,21 +51,21 @@ void main() {
 
     setUp(() {
       // mockAuthRepository = MockAuthRepository();
-      mockAuthLoginUsecase = MockAuthLoginUsecase();
-      mockAuthLogoutUsecase = MockAuthLogoutUsecase();
-      mockAuthSaveUserUsecase = MockAuthSaveUserUsecase();
-      mockAuthGetUserUsecase = MockAuthGetUserUsecase();
+      mockAuthLoginUseCase = MockAuthLoginUseCase();
+      mockAuthLogoutUseCase = MockAuthLogoutUseCase();
+      mockAuthSaveUserUseCase = MockAuthSaveUserUseCase();
+      mockAuthGetUserUseCase = MockAuthGetUserUseCase();
 
-      // Mock getUserUsecase for automatic AuthCheckSession call in constructor
+      // Mock getUserUseCase for automatic AuthCheckSession call in constructor
       when(
-        () => mockAuthGetUserUsecase.execute(any<NoParams>()),
+        () => mockAuthGetUserUseCase.execute(any<NoParams>()),
       ).thenThrow(PersistenceException.userNotFound());
 
       authBloc = AuthBloc(
-        loginUsecase: mockAuthLoginUsecase,
-        logoutUsecase: mockAuthLogoutUsecase,
-        saveUserUsecase: mockAuthSaveUserUsecase,
-        getUserUsecase: mockAuthGetUserUsecase,
+        loginUseCase: mockAuthLoginUseCase,
+        logoutUseCase: mockAuthLogoutUseCase,
+        saveUserUseCase: mockAuthSaveUserUseCase,
+        getUserUseCase: mockAuthGetUserUseCase,
       );
     });
 
@@ -74,7 +74,7 @@ void main() {
     });
 
     test('AuthCheckSession is called automatically on bloc creation', () {
-      verify(() => mockAuthGetUserUsecase.execute(any<NoParams>())).called(1);
+      verify(() => mockAuthGetUserUseCase.execute(any<NoParams>())).called(1);
     });
 
     blocTest<AuthBloc, AuthState>(
@@ -82,7 +82,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthLoginUsecase.execute(any<LoginParams>()),
+          () => mockAuthLoginUseCase.execute(any<LoginParams>()),
         ).thenAnswer((_) async => testUser);
       },
       act: (bloc) => bloc.add(
@@ -101,7 +101,7 @@ void main() {
       ],
       verify: (_) {
         verify(
-          () => mockAuthLoginUsecase.execute(any<LoginParams>()),
+          () => mockAuthLoginUseCase.execute(any<LoginParams>()),
         ).called(1);
       },
     );
@@ -111,7 +111,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthLoginUsecase.execute(any<LoginParams>()),
+          () => mockAuthLoginUseCase.execute(any<LoginParams>()),
         ).thenThrow(Exception('Invalid credentials'));
       },
       act: (bloc) => bloc.add(
@@ -130,7 +130,7 @@ void main() {
       ],
       verify: (_) {
         verify(
-          () => mockAuthLoginUsecase.execute(any<LoginParams>()),
+          () => mockAuthLoginUseCase.execute(any<LoginParams>()),
         ).called(1);
       },
     );
@@ -140,7 +140,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthLogoutUsecase.execute(any<NoParams>()),
+          () => mockAuthLogoutUseCase.execute(any<NoParams>()),
         ).thenAnswer((_) async {});
       },
       act: (bloc) => bloc.add(const AuthExecuteLogout()),
@@ -153,7 +153,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(() => mockAuthLogoutUsecase.execute(any<NoParams>())).called(1);
+        verify(() => mockAuthLogoutUseCase.execute(any<NoParams>())).called(1);
       },
     );
 
@@ -162,7 +162,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthLogoutUsecase.execute(any<NoParams>()),
+          () => mockAuthLogoutUseCase.execute(any<NoParams>()),
         ).thenThrow(Exception('Logout failed'));
       },
       act: (bloc) => bloc.add(const AuthExecuteLogout()),
@@ -175,7 +175,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(() => mockAuthLogoutUsecase.execute(any<NoParams>())).called(1);
+        verify(() => mockAuthLogoutUseCase.execute(any<NoParams>())).called(1);
       },
     );
 
@@ -184,13 +184,13 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthSaveUserUsecase.execute(any<User>()),
+          () => mockAuthSaveUserUseCase.execute(any<User>()),
         ).thenAnswer((_) async {});
       },
       act: (bloc) => bloc.add(const AuthSaveUser(user: testUser)),
       expect: () => <AuthState>[], // No new state
       verify: (_) {
-        verify(() => mockAuthSaveUserUsecase.execute(any<User>())).called(1);
+        verify(() => mockAuthSaveUserUseCase.execute(any<User>())).called(1);
       },
     );
 
@@ -199,7 +199,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthSaveUserUsecase.execute(any<User>()),
+          () => mockAuthSaveUserUseCase.execute(any<User>()),
         ).thenThrow(Exception('Save failed'));
       },
       act: (bloc) => bloc.add(const AuthSaveUser(user: testUser)),
@@ -211,7 +211,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(() => mockAuthSaveUserUsecase.execute(any<User>())).called(1);
+        verify(() => mockAuthSaveUserUseCase.execute(any<User>())).called(1);
       },
     );
 
@@ -220,7 +220,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthSaveUserUsecase.execute(testUser),
+          () => mockAuthSaveUserUseCase.execute(testUser),
         ).thenThrow(ValidationException.greaterThanZero('id'));
       },
       act: (bloc) => bloc.add(const AuthSaveUser(user: testUser)),
@@ -232,7 +232,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(() => mockAuthSaveUserUsecase.execute(testUser)).called(1);
+        verify(() => mockAuthSaveUserUseCase.execute(testUser)).called(1);
       },
     );
 
@@ -241,7 +241,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthSaveUserUsecase.execute(testUser),
+          () => mockAuthSaveUserUseCase.execute(testUser),
         ).thenThrow(ValidationException.emptyField('password'));
       },
       act: (bloc) => bloc.add(const AuthSaveUser(user: testUser)),
@@ -253,7 +253,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(() => mockAuthSaveUserUsecase.execute(testUser)).called(1);
+        verify(() => mockAuthSaveUserUseCase.execute(testUser)).called(1);
       },
     );
 
@@ -262,7 +262,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthSaveUserUsecase.execute(testUser),
+          () => mockAuthSaveUserUseCase.execute(testUser),
         ).thenThrow(ValidationException.nonNegative('balance'));
       },
       act: (bloc) => bloc.add(const AuthSaveUser(user: testUser)),
@@ -274,7 +274,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(() => mockAuthSaveUserUsecase.execute(testUser)).called(1);
+        verify(() => mockAuthSaveUserUseCase.execute(testUser)).called(1);
       },
     );
 
@@ -283,7 +283,7 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthGetUserUsecase.execute(any<NoParams>()),
+          () => mockAuthGetUserUseCase.execute(any<NoParams>()),
         ).thenAnswer((_) async => testUser);
       },
       act: (bloc) => bloc.add(const AuthCheckSession()),
@@ -296,7 +296,7 @@ void main() {
       ],
       verify: (_) {
         // Called twice: once in constructor, once in test
-        verify(() => mockAuthGetUserUsecase.execute(any<NoParams>())).called(2);
+        verify(() => mockAuthGetUserUseCase.execute(any<NoParams>())).called(2);
       },
     );
 
@@ -305,14 +305,14 @@ void main() {
       build: () => authBloc,
       setUp: () {
         when(
-          () => mockAuthGetUserUsecase.execute(any<NoParams>()),
+          () => mockAuthGetUserUseCase.execute(any<NoParams>()),
         ).thenThrow(PersistenceException.userNotFound());
       },
       act: (bloc) => bloc.add(const AuthCheckSession()),
       expect: () => <AuthState>[],
       verify: (_) {
         // Called twice: once in constructor, once in test
-        verify(() => mockAuthGetUserUsecase.execute(any<NoParams>())).called(2);
+        verify(() => mockAuthGetUserUseCase.execute(any<NoParams>())).called(2);
       },
     );
   });

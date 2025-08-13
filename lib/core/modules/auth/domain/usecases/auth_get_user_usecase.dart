@@ -1,8 +1,8 @@
 import 'package:flappt/core/base/index.dart';
-import 'package:flappt/core/shared/infra/auth/index.dart';
+import 'package:flappt/core/modules/index.dart';
 
-class AuthGetUserUsecase implements Usecase<User, NoParams> {
-  AuthGetUserUsecase({
+class AuthGetUserUseCase implements UseCase<User, NoParams> {
+  AuthGetUserUseCase({
     required this.authRepository,
   });
 

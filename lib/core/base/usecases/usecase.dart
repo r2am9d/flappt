@@ -1,4 +1,4 @@
-abstract class Usecase<T, P> {
+abstract class UseCase<T, P> {
   Future<T> execute(P params);
 }
 

@@ -63,14 +63,6 @@ class AppTheme {
     AppTheme(color: color, font: font);
   }
 
-  // Check if theme is initialized
-  static bool get isInitialized => _instance != null;
-
-  // Reset the singleton
-  static void reset() {
-    _instance = null;
-  }
-
   // Generate secondary color from primary color
   Color _getSecondaryColor(Color color) {
     return getColorShade(color, 300);

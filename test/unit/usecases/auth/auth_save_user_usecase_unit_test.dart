@@ -1,5 +1,5 @@
 import 'package:flappt/core/errors/index.dart';
-import 'package:flappt/core/shared/index.dart';
+import 'package:flappt/core/modules/index.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -12,7 +12,7 @@ void main() {
     registerFallbackValue(FakeUser());
   });
 
-  late AuthSaveUserUsecase usecase;
+  late AuthSaveUserUseCase usecase;
   late MockAuthRepository mockRepository;
 
   // Test data
@@ -73,10 +73,10 @@ void main() {
 
   setUp(() {
     mockRepository = MockAuthRepository();
-    usecase = AuthSaveUserUsecase(authRepository: mockRepository);
+    usecase = AuthSaveUserUseCase(authRepository: mockRepository);
   });
 
-  group('AuthSaveUserUsecase Unit Test', () {
+  group('AuthSaveUserUseCase Unit Test', () {
     test('should complete successfully when save succeeds', () async {
       // arrange
       when(

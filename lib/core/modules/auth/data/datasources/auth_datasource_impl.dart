@@ -1,6 +1,6 @@
 import 'package:flappt/core/config/index.dart';
 import 'package:flappt/core/errors/index.dart';
-import 'package:flappt/core/shared/index.dart';
+import 'package:flappt/core/modules/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthDataSourceImpl implements AuthDataSource {
@@ -16,7 +16,8 @@ class AuthDataSourceImpl implements AuthDataSource {
       throw PersistenceException.invalidCredentials();
     }
 
-    final userModel = UserModel.fromEntity(defaultUser);
+    final userModel = UserEntityMapper.toModel(defaultUser);
+
     await saveUser(userModel);
 
     return userModel;

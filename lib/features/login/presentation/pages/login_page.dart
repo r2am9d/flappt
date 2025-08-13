@@ -1,4 +1,5 @@
 import 'package:flappt/core/extensions/index.dart';
+import 'package:flappt/core/modules/index.dart';
 import 'package:flappt/core/shared/index.dart';
 import 'package:flappt/features/login/presentation/index.dart';
 import 'package:flutter/material.dart';
