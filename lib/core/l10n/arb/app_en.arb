@@ -1,0 +1,12 @@
+{
+    "@@locale": "en",
+    "appName": "Flappt",
+
+    "bottomNavbarItemHome": "Home",
+    "bottomNavbarItemProfile": "Profile",
+
+    "counterAppBarTitle": "Counter",
+    "@counterAppBarTitle": {
+        "description": "Text shown in the AppBar of the Counter Page"
+    }
+}

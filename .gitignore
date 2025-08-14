@@ -92,6 +92,11 @@ packages/**/pubspec.lock
 # Web related
 lib/generated_plugin_registrant.dart
 
+# Generated files
+*.mapper.dart
+*.entity_mapper.dart
+lib/l10n/gen/
+
 # Symbolication related
 app.*.symbols
 
@@ -110,6 +115,3 @@ app.*.map.json
 !.idea/codeStyles/
 !.idea/dictionaries/
 !.idea/runConfigurations/
-
-# Generated l10n files
-lib/l10n/gen/
